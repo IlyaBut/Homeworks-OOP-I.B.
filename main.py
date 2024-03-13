@@ -9,7 +9,7 @@ class Student:
         self.average_rating = float()
     def __str__(self):
         grades_count = 0
-        courses_in_progress_sting = ",".join(self.courses_in_progress)
+        courses_in_progress_string = ",".join(self.courses_in_progress)
         finished_courses_string = ",".join(self.finished_courses)
         for k in self.grades:
             grades_count += len(self.grades[k])
@@ -21,11 +21,7 @@ class Student:
               f'Завершенные курсы: {finished_courses_string}'
         return result
 
-    def __lt__(self, other):
-        if not isinstance(other, Student):
-            print('Сравнение некорректно')
-            return
-        return self.mean < other.mean
+
 
     def rate_hw(self, lecturer, course, grade):
         if isinstance(lecturer,
@@ -61,7 +57,7 @@ class Lecturer(Mentor):
         for k in self.grades:
             grades_count += len(self.grades[k])
         self.average_rating = sum(map(sum, self.grades.values())) / grades_count
-        result = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_rating}'
+        result = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_rating.__round__(2)}'
         return result
 
     def __lt__(self, other):
@@ -99,11 +95,11 @@ cool_reviewer_2 = Reviewer('Вадик', 'Промзоновский')
 cool_reviewer_2.courses_attached += ['Python']
 cool_reviewer_2.courses_attached += ['Java']
 
-student_1 = Student('Шура', 'Лоснящий')
+student_1 = Student('Шура', 'Лоснящий', "M")
 student_1.courses_in_progress += ['Python']
 student_1.finished_courses += ['Введение в программирование']
 
-student_2 = Student('Бублик', 'Бездырочный')
+student_2 = Student('Бублик', 'Бездырочный', 'M')
 student_2.courses_in_progress += ['Java']
 student_2.finished_courses += ['Введение в программирование']
 
@@ -165,4 +161,4 @@ def lecturer_rating(lecturer_list, course_name):
     return average_for_all
 
 print(f"Средняя оценка для всех студентов по курсу {'Python'}: {student_rating(student_list, 'Python')}")
-print(f"Средняя оценка для всех лекторов по курсу {'Python'}: {lecturer_rating(lecturer_list, 'Python')}")
+print(f"Средняя оценка для всех лекторов по курсу {'Python'}: {lecturer_rating(lecturer_list, 'Python').__round__(2)}")
