@@ -6,14 +6,15 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
-        self.average_rating = float()
+
+
     def __str__(self):
         grades_count = 0
-        courses_in_progress_string = ",".join(self.courses_in_progress)
-        finished_courses_string = ",".join(self.finished_courses)
         for k in self.grades:
             grades_count += len(self.grades[k])
             self.mean = sum(map(sum, self.grades.values())) / grades_count
+        courses_in_progress_string = ",".join(self.courses_in_progress)
+        finished_courses_string = ",".join(self.finished_courses)
         result = f'Имя: {self.name}\n' \
               f'Фамилия: {self.surname}\n' \
               f'Средняя оценка за домашнее задание: {self.mean}\n' \
@@ -24,8 +25,7 @@ class Student:
 
 
     def rate_hw(self, lecturer, course, grade):
-        if isinstance(lecturer,
-                      Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
+        if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
             if course in lecturer.grades:
                 lecturer.grades[course] += [grade]
             else:
@@ -37,7 +37,7 @@ class Student:
         if not isinstance(other, Student):
             print('Сравнение некорректно')
             return
-        return self.average_rating < other.average_rating
+        return self.mean < other.mean
 
 class Mentor:
     def __init__(self, name, surname):
@@ -49,7 +49,6 @@ class Mentor:
 class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
-        self.average_rating = float()
         self.grades = {}
 
     def __str__(self):
@@ -142,11 +141,11 @@ lecturer_list = [best_lecturer_1, best_lecturer_2]
 
 def student_rating(student_list, course_name):
     sum_all = 0
-    count_all = 0
+    count_all=0
     for stud in student_list:
-        if stud.courses_in_progress == [course_name]:
-            sum_all += stud.average_rating
-            count_all += 1
+        if course_name in stud.courses_in_progress:
+            sum_all += sum(stud.grades.get(course_name, []))
+            count_all = len(stud.grades.get(course_name, []))
     average_for_all = sum_all / count_all
     return average_for_all
 
@@ -154,9 +153,9 @@ def lecturer_rating(lecturer_list, course_name):
     sum_all = 0
     count_all = 0
     for lect in lecturer_list:
-        if lect.courses_attached == [course_name]:
-            sum_all += lect.average_rating
-            count_all += 1
+        if course_name in lect.courses_attached:
+            sum_all += sum(lect.grades.get(course_name, []))
+            count_all = len(lect.grades.get(course_name, []))
     average_for_all = sum_all / count_all
     return average_for_all
 
