@@ -7,17 +7,17 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
 
+    def aver(self):
+        grades_lst = sum(self.grades.values(), [])
+        result = sum(grades_lst)/len(grades_lst)
+        return result
 
     def __str__(self):
-        grades_count = 0
-        for k in self.grades:
-            grades_count += len(self.grades[k])
-            self.mean = sum(map(sum, self.grades.values())) / grades_count
         courses_in_progress_string = ",".join(self.courses_in_progress)
         finished_courses_string = ",".join(self.finished_courses)
         result = f'Имя: {self.name}\n' \
               f'Фамилия: {self.surname}\n' \
-              f'Средняя оценка за домашнее задание: {self.mean}\n' \
+              f'Средняя оценка за домашнее задание: {self.aver()}\n' \
               f'Курсы в процессе обучения: {courses_in_progress_string}\n' \
               f'Завершенные курсы: {finished_courses_string}'
         return result
@@ -37,7 +37,7 @@ class Student:
         if not isinstance(other, Student):
             print('Сравнение некорректно')
             return
-        return self.mean < other.mean
+        return self.aver() < other.aver()
 
 class Mentor:
     def __init__(self, name, surname):
